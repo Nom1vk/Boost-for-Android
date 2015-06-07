@@ -1,22 +1,14 @@
 # Boost for Android
 Boost for android is a set of tools to compile the main part of the [Boost C++ Libraries](http://www.boost.org/) for the Android platform.
 
-Currently supported boost versions are 1.45.0, 1.48.0, 1.49.0 and 1.53.0. Boost 1.54.0 and 1.55.0 shall be considered experimental.
+Currently supported boost version is 1.53.0. Boost 1.54.0 and 1.55.0 shall be considered experimental.
 
 To compile Boost for Android you may use one of the following NDKs:
 
-| NDK / boost | 1.45 | 1.48 | 1.49 | 1.53 |
-| ----------- | ---- | ---- | ---- | ---- |
-| r4 customized by [Dmitry Moskalchuk aka CrystaX](http://www.crystax.net/android/ndk.php). | x |   |   |   |
-| r5 from the [official android repository](http://developer.android.com).                  | x |   |   |   |
-| r5 customized by [CrystaX](http://www.crystax.net/android/ndk.php).                       | x |   |   |   |
-| r7 customized by [CrystaX](http://www.crystax.net/android/ndk.php).                       | x | x | x |   |
-| r8 from the [official android repository](http://developer.android.com).                  | x | x | x |   |
-| r8b from the [official android repository](http://developer.android.com).                 |   | x | x |   |
-| r8c from the [official android repository](http://developer.android.com).                 |   |   | x |   |
-| r8d from the [official android repository](http://developer.android.com).                 |   |   | x | x |
-| r8e from the [official android repository](http://developer.android.com).                 |   |   | x | x |
-| r10 from the [official android repository](http://developer.android.com).                 |   |   | x | x |
+| NDK / boost | 1.53 | 1.54 | 1.55 |
+| ----------- | ---- | ---- | ---- |
+| **r9b (64-bit)** from the [official android repository](http://developer.android.com). | ✔︎ | ✔︎ | ✔︎ |
+| **r10 (64-bit)** from the [official android repository](http://developer.android.com). | ✔︎ | ✔︎ | ✔︎ |
 
 # Quick Start
 
@@ -31,19 +23,20 @@ To compile Boost for Android you may use one of the following NDKs:
 
 Linux.
 ```
-./build-android.sh $(NDK_ROOT)
+./build-android.sh [-n $NDK_ROOT]
 ```
 Windows:
 ```
-build-android.bat $(NDK_ROOT)
+build-android.bat [-n $NDK_ROOT]
 ```
-NOTE: Do not forget to replace backslash with slashes in $(NDK_ROOT). For example set $(NDK_ROOT) to D:/android-ndk-r8e instead of D:\android-ndk-r8e
-    
+
+NOTE: Do not forget to replace backslash with slashes in `$NDK_ROOT`. For example set `$NDK_ROOT` to D:/android-ndk-r8e instead of D:\android-ndk-r8e
+
 On windows you will need MSYS to be able to launch the corresponding bat files (http://www.mingw.org/wiki/MSYS).
-    
+
 This command will download and build boost against the NDK specified and output the final headers and libs in the `build` folder. Make sure to provide an absolute path the the NDK folder!
 
-For more info about usage and available commands use `--help`.
+For more info about usage and available commands use `-h`.
 
 ### Including
 
@@ -67,7 +60,7 @@ The projects is split into two main branches, the master and devel. The master b
 
 ## Troubleshooting
 
-In case you encounter bunch of linker errors when building your app with boost, 
+In case you encounter bunch of linker errors when building your app with boost,
 this might help:
 
 ### Building from a 64 bit machine (Linux)
@@ -81,7 +74,7 @@ To install them just use the following
 
 ### NDK 7 (CrystaX)
 
-Add `-lgnustl_static` *AFTER* all boost libraries to the LOCAL_LDLIBS line in 
+Add `-lgnustl_static` *AFTER* all boost libraries to the LOCAL_LDLIBS line in
 Android.mk. Example:
 
     LOCAL_LDLIBS += lboost_system-gcc-md lboost_thread-gcc-md -lgnustl_static

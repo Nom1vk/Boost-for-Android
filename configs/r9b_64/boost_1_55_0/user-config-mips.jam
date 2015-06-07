@@ -38,15 +38,14 @@
 # ------------------
 
 import os ;
-local AndroidNDKRoot = [ os.environ AndroidNDKRoot ] ;
-local AndroidBinariesPath = [ os.environ AndroidBinariesPath ] ;
+local NDK_ROOT = [ os.environ NDK_ROOT ] ;
+
 # --------------------------------------------------------------------
-# Custom Test (Victor Kyriazakos)
-using gcc : androidR8e
+using gcc : mips
 :
-$(AndroidBinariesPath)/aarch64-linux-android-g++
+mipsel-linux-android-g++
 :
-<archiver>$(AndroidBinariesPath)/aarch64-linux-android-ar
+<archiver>mipsel-linux-android-ar
 <compileflags>-fexceptions
 <compileflags>-frtti
 <compileflags>-fpic
@@ -56,26 +55,22 @@ $(AndroidBinariesPath)/aarch64-linux-android-g++
 <compileflags>-Os
 <compileflags>-fomit-frame-pointer
 <compileflags>-fno-strict-aliasing
-<compileflags>-finline-limit=300
-<compileflags>-I$(AndroidNDKRoot)/sources/android/support/include
-<compileflags>-DTHOUSEP=MON_THOUSANDS_SEP
-<compileflags>-DRADIXCHAR=MON_DECIMAL_POINT
-<compileflags>-I$(AndroidNDKRoot)/platforms/android-21/arch-arm64/usr/include
+<compileflags>-finline-limit=64
+<compileflags>-I$(NDK_ROOT)/platforms/android-9/arch-mips/usr/include
 <compileflags>-Wa,--noexecstack
 <compileflags>-DANDROID
 <compileflags>-D__ANDROID__
 <compileflags>-DNDEBUG
 <compileflags>-O2
 <compileflags>-g
-<compileflags>-I$(AndroidNDKRoot)/sources/cxx-stl/gnu-libstdc++/4.9/include
-<compileflags>-I$(AndroidNDKRoot)/sources/cxx-stl/gnu-libstdc++/4.9/libs/arm64-v8a/include
+<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/include
+<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/libs/mips/include
 # @Moss - Above are the 'oficial' android flags
-<architecture>arm
+<architecture>mips32
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-fdata-sections
-<cxxflags>-D__arm__
 <cxxflags>-D_REENTRANT
 <cxxflags>-D_GLIBCXX__PTHREADS
+<cxxflags>-D__mips__
 ;
-
