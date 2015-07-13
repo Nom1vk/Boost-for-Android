@@ -62,15 +62,15 @@ arm-linux-androideabi-g++
 <compileflags>-fomit-frame-pointer
 <compileflags>-fno-strict-aliasing
 <compileflags>-finline-limit=64
-<compileflags>-I$(NDK_ROOT)/platforms/android-9/arch-arm/usr/include
+<compileflags>-I$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include
 <compileflags>-Wa,--noexecstack
 <compileflags>-DANDROID
 <compileflags>-D__ANDROID__
 <compileflags>-DNDEBUG
 <compileflags>-O2
 <compileflags>-g
-<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/include
-<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.6/libs/armeabi-v7a/include
+<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/include
+<compileflags>-I$(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include
 # @Moss - Above are the 'oficial' android flags
 <architecture>arm
 <compileflags>-fvisibility=hidden

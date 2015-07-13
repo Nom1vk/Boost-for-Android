@@ -1,8 +1,10 @@
 /boost_*
 /build_*
 /build
+boost_*
 *~
 logs
 build.log
 *.swp
 *.vim
+*.svg
