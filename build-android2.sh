@@ -103,10 +103,13 @@ PREFIX=$(portable_realpath ${PREFIX:-./build_${BOOST_VERSION_U}/${ABI}})
 
 # Get NDK version for informative purposes
 RELEASE_PATH="$NDK_ROOT/RELEASE.txt"
+RELEASE_PATH2="$NDK_ROOT/RELEASE.TXT"
 NDK_VERSION=""
 if [ -f "$RELEASE_PATH" ]; then
   NDK_VERSION=$(<"$RELEASE_PATH")
-else
+elif [ -f "$RELEASE_PATH2" ]; then
+  NDK_VERSION=$(<"$RELEASE_PATH2")
+else 
   echo "Unsupported NDK version: ${RELEASE_PATH} not available" >&2
   exit 1
 fi
