@@ -125,7 +125,7 @@ if [ ! -d "configs/${CONFIG}" ]; then
 fi
 
 # Check if the boost version is supported
-JAM_PATH="configs/${CONFIG}/${BOOST_DIR}/user-config-${ABI}.jam"
+JAM_PATH="$PWD/configs/${CONFIG}/${BOOST_DIR}/user-config-${ABI}.jam"
 if [ ! -f "$JAM_PATH" ]; then
   echo "Unsupported boost version: ${JAM_PATH} not available">&2
   exit 1
@@ -168,57 +168,62 @@ Extra options: ${EXTRA_OPTIONS:-<none>}
 EOT
 echo
 
-# Begin potentially destructive actions
-echo "=====> Building boost ..."
+# Check if already built, to force rebuilt for now
+# HACK: Delete build directory
+if [ ! -d "$PREFIX" ]; then
+	# Begin potentially destructive actions
+	echo "=====> Building boost ..."
 
-# Make sure the prefix exists
-mkdir -p "$PREFIX"
+	# Make sure the prefix exists
+	mkdir -p "$PREFIX"
+	SOURCEDIR="$PWD"
+	cd "$PREFIX"
 
-# Download source
-if [ -f "$BOOST_ARCHIVE" ]; then
-  echo "-----> Using ${BOOST_ARCHIVE}"
-else
-  echo "-----> Downloading source ..."
-  wget -- "$BOOST_URL"
+	# Download source
+	if [ -f "$BOOST_ARCHIVE" ]; then
+	  echo "-----> Using ${BOOST_ARCHIVE}"
+	else
+	  echo "-----> Downloading source ..."
+	  wget -- "$BOOST_URL"
+	fi
+
+	# Clean up
+	echo "-----> Cleaning up previous build artifacts ..."
+	rm -rf -- "$BOOST_DIR"
+
+	# Unpack
+	echo "-----> Unpacking source ..."
+	tar xjf "$BOOST_ARCHIVE"
+
+	# Apply patches
+	echo "-----> Applying patches ..."
+	BOOST_PATCH_DIR="$SOURCEDIR/patches/boost-${BOOST_VERSION_U}"
+	cp -- "${JAM_PATH}" $BOOST_DIR/tools/build/v2/user-config.jam
+	for patch in "$(find "$BOOST_PATCH_DIR" -name '*.patch')"; do
+	  (cd "$BOOST_DIR" && patch -p1 <"$patch")
+	done
+
+	# Bootstrap
+	echo "-----> Bootstrapping ..."
+	(cd "$BOOST_DIR" && ./bootstrap.sh 2>&1 | tee -a build.log)
+
+	# Compile
+	echo "-----> Compiling ..."
+	export PATH="$TOOLCHAIN_PATH/bin:$PATH"
+	export NDK_ROOT
+	export NO_BZIP2=1
+
+	(cd "$BOOST_DIR" && ./bjam -q                      \
+	  target-os=linux              \
+	  toolset="${BOOST_TOOLSET}"   \
+	  link=static                  \
+	  threading=multi              \
+	  --layout=versioned           \
+	  --prefix="${PREFIX}"         \
+	  $LIBRARIES                   \
+	  $VARIANT                     \
+	  $EXTRA_OPTIONS               \
+	  install 2>&1 ) | tee -a build.log
 fi
-
-# Clean up
-echo "-----> Cleaning up previous build artifacts ..."
-rm -rf -- "$BOOST_DIR"
-
-# Unpack
-echo "-----> Unpacking source ..."
-tar xjf "$BOOST_ARCHIVE"
-
-# Apply patches
-echo "-----> Applying patches ..."
-BOOST_PATCH_DIR="$PWD/patches/boost-${BOOST_VERSION_U}"
-cp -- "${JAM_PATH}" $BOOST_DIR/tools/build/v2/user-config.jam
-for patch in "$(find "$BOOST_PATCH_DIR" -name '*.patch')"; do
-  (cd "$BOOST_DIR" && patch -p1 <"$patch")
-done
-
-# Bootstrap
-echo "-----> Bootstrapping ..."
-(cd "$BOOST_DIR" && ./bootstrap.sh 2>&1 | tee -a build.log)
-
-# Compile
-echo "-----> Compiling ..."
-export PATH="$TOOLCHAIN_PATH/bin:$PATH"
-export NDK_ROOT
-export NO_BZIP2=1
-
-(cd "$BOOST_DIR" && ./bjam -q                      \
-  target-os=linux              \
-  toolset="${BOOST_TOOLSET}"   \
-  link=static                  \
-  threading=multi              \
-  --layout=versioned           \
-  --prefix="${PREFIX}"         \
-  $LIBRARIES                   \
-  $VARIANT                     \
-  $EXTRA_OPTIONS               \
-  install 2>&1 ) | tee -a build.log
-
 echo "=====> Build completed, artifacts available at:"
 echo "       ${PREFIX}"

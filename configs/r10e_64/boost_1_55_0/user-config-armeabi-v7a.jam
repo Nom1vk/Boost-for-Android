@@ -62,7 +62,7 @@ arm-linux-androideabi-g++
 <compileflags>-fomit-frame-pointer
 <compileflags>-fno-strict-aliasing
 <compileflags>-finline-limit=64
-<compileflags>-I$(NDK_ROOT)/platforms/android-21/arch-arm/usr/include
+<compileflags>-I$(NDK_ROOT)/platforms/android-19/arch-arm/usr/include
 <compileflags>-Wa,--noexecstack
 <compileflags>-DANDROID
 <compileflags>-D__ANDROID__
