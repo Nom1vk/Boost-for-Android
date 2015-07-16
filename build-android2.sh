@@ -99,7 +99,7 @@ BOOST_VERSION_U="$(echo $BOOST_VERSION | tr . _)"
 BOOST_DIR="boost_${BOOST_VERSION_U}"
 BOOST_ARCHIVE="${BOOST_DIR}.tar.bz2"
 BOOST_URL="http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/${BOOST_ARCHIVE}"
-PREFIX=$(portable_realpath ${PREFIX:-.)
+PREFIX=$(portable_realpath ${PREFIX:-.})
 PREFIX="$PREFIX/build_${BOOST_VERSION_U}/${ABI}"
 
 # Get NDK version for informative purposes
@@ -181,7 +181,7 @@ if [ ! -d "${PREFIX}/build_${BOOST_VERSION_U}/${ABI}" ]; then
 	SOURCEDIR="$PWD"
 	cd "$PREFIX"
 
-	# Download source
+	# Download source./
 	if [ -f "$BOOST_ARCHIVE" ]; then
 	  echo "-----> Using ${BOOST_ARCHIVE}"
 	else
