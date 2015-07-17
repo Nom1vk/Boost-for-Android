@@ -181,7 +181,7 @@ if [ ! -d "${PREFIX}/build_${BOOST_VERSION_U}/${ABI}" ]; then
 	SOURCEDIR="$PWD"
 	cd "$PREFIX"
 
-	# Download source
+	# Download source./
 	if [ -f "$BOOST_ARCHIVE" ]; then
 	  echo "-----> Using ${BOOST_ARCHIVE}"
 	else
