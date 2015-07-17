@@ -164,7 +164,7 @@ Boost toolset: ${BOOST_TOOLSET}
 Boost libraries: ${LIBRARIES}
 Boost variant: ${VARIANT:-<default>}
 Build prefix: ${PREFIX}
-Build location: ${PREFIX}/build_${BOOST_VERSION_U}/${ABI}
+Build location: ${PREFIX}
 Build OS: ${OS}
 Extra options: ${EXTRA_OPTIONS:-<none>}
 EOT
@@ -172,7 +172,7 @@ echo
 
 # Check if already built, to force rebuilt for now
 # HACK: Delete build directory
-if [ ! -d "${PREFIX}/build_${BOOST_VERSION_U}/${ABI}" ]; then
+if [ ! -d "${PREFIX}" ]; then
 	# Begin potentially destructive actions
 	echo "=====> Building boost ..."
 
